@@ -1,6 +1,7 @@
 package com.castagno.nicole.loginexample.common.presentation
 
-abstract class Presenter(val view: View) {
+// All presenters should extend this class and specify FOR WHAT VIEW (V) the presenter is for
+abstract class Presenter<V: View>(val view: V) {
     abstract fun onViewReady()
     abstract fun onViewDestroy()
 }
