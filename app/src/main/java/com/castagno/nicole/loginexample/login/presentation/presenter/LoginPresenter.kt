@@ -24,13 +24,25 @@ class LogCatEventTracker : EventTracker { // <-- PERFECT
 
 // Presenter for a LoginScreen - can interact with anything that "looks" like a LoginScreen
 // (i.e. implements LoginScreen interface)
-class LoginPresenter(view: LoginScreen, val tracker: EventTracker) : Presenter<LoginScreen>(view) {
+class LoginPresenter(view: LoginScreen, private val tracker: EventTracker) : Presenter<LoginScreen>(view) {
     override fun onViewReady() {
-        tracker.trackEvent(Event("Hello", 2))
-        view.showLoginError()
+        tracker.trackEvent(Event("view_page", "login_screen"))
+        //view.showLoginError()
     }
 
     override fun onViewDestroy() {
         tracker.trackEvent(Event("Hello", 3))
+    }
+
+    fun onEmailEntered(email: String) {
+        if (!email.contains("@")) {
+            view.showIncorrectEmailError()
+        }
+    }
+
+    fun onPasswordEntered(password: String) {
+        if (password.length < 5) {
+            view.showIncorrectPasswordError()
+        }
     }
 }

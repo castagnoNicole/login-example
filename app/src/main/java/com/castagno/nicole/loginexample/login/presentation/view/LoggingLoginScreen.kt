@@ -12,4 +12,12 @@ class LoggingLoginScreen : LoginScreen {
     override fun showLoginError() {
         Log.i("LoginScreen", "showLoginError")
     }
+
+    override fun showIncorrectEmailError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showIncorrectPasswordError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

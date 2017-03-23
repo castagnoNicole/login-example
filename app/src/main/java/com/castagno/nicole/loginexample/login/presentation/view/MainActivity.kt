@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.castagno.nicole.loginexample.R
+import com.castagno.nicole.loginexample.login.presentation.presenter.LogCatEventTracker
 import com.castagno.nicole.loginexample.login.presentation.presenter.LoginPresenter
 
 class MainActivity : AppCompatActivity() {
@@ -24,10 +25,9 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
         }
 
-
-
         val view = LoggingLoginScreen()
-        val presenter = LoginPresenter(view)
+        val tracker = LogCatEventTracker()
+        val presenter = LoginPresenter(view, tracker)
         presenter.onViewReady()
     }
 

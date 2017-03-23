@@ -5,5 +5,8 @@ import com.castagno.nicole.loginexample.common.presentation.View
 // The "contract" every Login screen must satisfy
 interface LoginScreen : View {
     fun showLoginSuccessfulScreen()
+
     fun showLoginError()
+    fun showIncorrectEmailError()
+    fun showIncorrectPasswordError()
 }
