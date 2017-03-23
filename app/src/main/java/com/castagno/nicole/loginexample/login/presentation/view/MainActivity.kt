@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         val view = LoggingLoginScreen()
         val tracker = LogCatEventTracker()
-        val presenter = LoginPresenter(view, tracker)
-        presenter.onViewReady()
+        //val presenter = LoginPresenter(view, tracker)
+        //presenter.onViewReady()
     }
 
 }

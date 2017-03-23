@@ -2,6 +2,7 @@ package com.castagno.nicole.loginexample.login.presentation.presenter
 
 import android.util.Log
 import com.castagno.nicole.loginexample.common.presentation.Presenter
+import com.castagno.nicole.loginexample.login.domain.EmailValidator
 import com.castagno.nicole.loginexample.login.presentation.view.LoginScreen
 
 // Class representing an event (storing useful information in a single object to improve readability)
@@ -24,7 +25,11 @@ class LogCatEventTracker : EventTracker { // <-- PERFECT
 
 // Presenter for a LoginScreen - can interact with anything that "looks" like a LoginScreen
 // (i.e. implements LoginScreen interface)
-class LoginPresenter(view: LoginScreen, private val tracker: EventTracker) : Presenter<LoginScreen>(view) {
+class LoginPresenter(
+        view: LoginScreen,
+        private val tracker: EventTracker,
+        private val emailValidator: EmailValidator
+) : Presenter<LoginScreen>(view) {
     override fun onViewReady() {
         tracker.trackEvent(Event("view_page", "login_screen"))
         //view.showLoginError()
@@ -35,7 +40,7 @@ class LoginPresenter(view: LoginScreen, private val tracker: EventTracker) : Pre
     }
 
     fun onEmailEntered(email: String) {
-        if (!email.contains("@")) {
+        if (!emailValidator.validate(email)) {
             view.showIncorrectEmailError()
         }
     }

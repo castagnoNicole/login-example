@@ -1,5 +1,6 @@
 package com.castagno.nicole.loginexample.login.presentation.presenter
 
+import com.castagno.nicole.loginexample.login.domain.EmailValidator
 import com.castagno.nicole.loginexample.login.presentation.view.LoginScreen
 import org.junit.Before
 import org.junit.Test
@@ -10,10 +11,11 @@ class LoginPresenterTest {
 
     private val view: LoginScreen = mock(LoginScreen::class.java)
     private val tracker: EventTracker = mock(EventTracker::class.java)
+    private val emailValidator: EmailValidator = mock(EmailValidator::class.java)
 
     @Before
     fun setUp() {
-        presenter = LoginPresenter(view, tracker)
+        presenter = LoginPresenter(view, tracker, emailValidator)
     }
 
     @Test
@@ -25,15 +27,27 @@ class LoginPresenterTest {
 
     @Test
     fun onEmailEntered_IncorrectEmail_ShowsError() {
-        presenter.onEmailEntered(":D")
+        // given: emailValidator returns false when validating ":D"
+        val invalidEmail = ":D"
+        `when`(emailValidator.validate(invalidEmail)).thenReturn(false)
 
+        // when: onEmail is called with invalid email
+        presenter.onEmailEntered(invalidEmail)
+
+        // then: view should show incorrect email error
         verify(view).showIncorrectEmailError()
     }
 
     @Test
     fun onEmailEntered_CorrectEmail_DoesntShowError() {
-        presenter.onEmailEntered("hello@remente.com")
+        // given
+        val validEmail = "hello@remente.com"
+        `when`(emailValidator.validate(validEmail)).thenReturn(true)
 
+        // when
+        presenter.onEmailEntered(validEmail)
+
+        // then
         verify(view, never()).showIncorrectEmailError()
     }
 
