@@ -5,13 +5,13 @@ import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.View
+import android.widget.Toast
 import com.castagno.nicole.loginexample.R
+import com.castagno.nicole.loginexample.login.domain.SimpleEmailValidator
 import com.castagno.nicole.loginexample.login.presentation.presenter.LogCatEventTracker
 import com.castagno.nicole.loginexample.login.presentation.presenter.LoginPresenter
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), LoginScreen {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,10 +25,34 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
         }
 
-        val view = LoggingLoginScreen()
+        val loginView = findViewById(R.id.login) as LoginView
+
         val tracker = LogCatEventTracker()
-        //val presenter = LoginPresenter(view, tracker)
-        //presenter.onViewReady()
+        val emailValidator = SimpleEmailValidator()
+        val presenter = LoginPresenter(this, tracker, emailValidator)
+        presenter.onViewReady()
+
+        loginView.onLoginClicked = {
+            val email = loginView.email
+            val password = loginView.password
+            presenter.onEmailEntered(email)
+            presenter.onPasswordEntered(password)
+        }
     }
 
+    override fun showLoginSuccessfulScreen() {
+        Toast.makeText(this, "showLoginSuccessfulScreen", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showLoginError() {
+        Toast.makeText(this, "showLoginError", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showIncorrectEmailError() {
+        Toast.makeText(this, "showIncorrectEmailError", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showIncorrectPasswordError() {
+        Toast.makeText(this, "showIncorrectPasswordError", Toast.LENGTH_SHORT).show()
+    }
 }

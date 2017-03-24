@@ -8,4 +8,8 @@
     tools:context=".login.presentation.view.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <com.castagno.nicole.loginexample.login.presentation.view.LoginView
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>
