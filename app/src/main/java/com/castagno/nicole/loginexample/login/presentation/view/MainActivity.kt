@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
 import com.castagno.nicole.loginexample.R
+import com.castagno.nicole.loginexample.login.data.FakeAuthRepository
+import com.castagno.nicole.loginexample.login.data.FakeNotificationRepository
 import com.castagno.nicole.loginexample.login.domain.SimpleEmailValidator
 import com.castagno.nicole.loginexample.login.presentation.presenter.LogCatEventTracker
 import com.castagno.nicole.loginexample.login.presentation.presenter.LoginPresenter
@@ -29,14 +31,15 @@ class MainActivity : AppCompatActivity(), LoginScreen {
 
         val tracker = LogCatEventTracker()
         val emailValidator = SimpleEmailValidator()
-        val presenter = LoginPresenter(this, tracker, emailValidator)
+        val authRepository = FakeAuthRepository()
+        val notificationRepository = FakeNotificationRepository()
+        val presenter = LoginPresenter(this, tracker, emailValidator, authRepository, notificationRepository)
         presenter.onViewReady()
 
         loginView.onLoginClicked = {
             val email = loginView.email
             val password = loginView.password
-            presenter.onEmailEntered(email)
-            presenter.onPasswordEntered(password)
+            presenter.onCredentialsEntered(email, password)
         }
     }
 

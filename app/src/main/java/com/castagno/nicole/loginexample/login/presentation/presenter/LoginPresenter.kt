@@ -2,8 +2,11 @@ package com.castagno.nicole.loginexample.login.presentation.presenter
 
 import android.util.Log
 import com.castagno.nicole.loginexample.common.presentation.Presenter
+import com.castagno.nicole.loginexample.login.domain.AuthRepository
 import com.castagno.nicole.loginexample.login.domain.EmailValidator
+import com.castagno.nicole.loginexample.login.domain.NotificationRepository
 import com.castagno.nicole.loginexample.login.presentation.view.LoginScreen
+import rx.Completable
 
 // Class representing an event (storing useful information in a single object to improve readability)
 data class Event(val name: String, val argument: Any)
@@ -28,26 +31,35 @@ class LogCatEventTracker : EventTracker { // <-- PERFECT
 class LoginPresenter(
         view: LoginScreen,
         private val tracker: EventTracker,
-        private val emailValidator: EmailValidator
+        private val emailValidator: EmailValidator,
+        private val authRepository: AuthRepository,
+        private val notificationRepository: NotificationRepository
 ) : Presenter<LoginScreen>(view) {
     override fun onViewReady() {
         tracker.trackEvent(Event("view_page", "login_screen"))
         //view.showLoginError()
+
+        val subscription = notificationRepository.monitorCurrentNotificationSettings()
+                .subscribe { notificationSetting ->
+                    Log.i("LoginPresenter", "notification setting received: $notificationSetting")
+                }
+
+        subscription.unsubscribe()
     }
 
     override fun onViewDestroy() {
         tracker.trackEvent(Event("Hello", 3))
     }
 
-    fun onEmailEntered(email: String) {
+    fun onCredentialsEntered(email: String, password: String) {
         if (!emailValidator.validate(email)) {
             view.showIncorrectEmailError()
-        }
-    }
-
-    fun onPasswordEntered(password: String) {
-        if (password.length < 5) {
+        } else if (password.length < 5) {
             view.showIncorrectPasswordError()
+        } else {
+            val onComplete: () -> Unit = { Log.i("LoginPresenter", "completed") }
+            val onError: (Throwable) -> Unit = { view.showIncorrectPasswordError() }
+            authRepository.authenticateWithEmail(email, password).subscribe(onComplete, onError)
         }
     }
 }

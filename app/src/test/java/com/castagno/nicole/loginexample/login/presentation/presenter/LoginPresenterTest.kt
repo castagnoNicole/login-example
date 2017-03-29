@@ -13,7 +13,7 @@ class LoginPresenterTest {
     private val tracker: EventTracker = mock(EventTracker::class.java)
     private val emailValidator: EmailValidator = mock(EmailValidator::class.java)
 
-    @Before
+    @Before //run this before every test
     fun setUp() {
         presenter = LoginPresenter(view, tracker, emailValidator)
     }
@@ -26,7 +26,7 @@ class LoginPresenterTest {
     }
 
     @Test
-    fun onEmailEntered_IncorrectEmail_ShowsError() {
+    fun onEmailEntered_IncorrectEmail_ShowsError() { //funcName_Status_WhatIsGoningToHappenc
         // given: emailValidator returns false when validating ":D"
         val invalidEmail = ":D"
         `when`(emailValidator.validate(invalidEmail)).thenReturn(false)
