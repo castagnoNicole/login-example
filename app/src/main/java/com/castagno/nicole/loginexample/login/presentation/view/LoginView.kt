@@ -1,7 +1,17 @@
 package com.castagno.nicole.loginexample.login.presentation.view
 
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
 import android.content.Context
+import android.icu.text.RelativeDateTimeFormatter
+import android.support.v4.view.animation.LinearOutSlowInInterpolator
+import android.transition.Slide
+import android.transition.TransitionManager
 import android.util.AttributeSet
+import android.util.Log
+import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.Interpolator
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
@@ -30,6 +40,38 @@ class LoginView : RelativeLayout {
     init {
         inflate(context, R.layout.view_login, this)
 
-        loginButton.setOnClickListener { onLoginClicked?.invoke() }
+        //loginButton.setOnClickListener { onLoginClicked?.invoke() }
+        loginButton.setOnClickListener { animateLoginButtonCrazy() }
+    }
+
+    // Animate using default transitions (will fade the login button)
+    private fun animateLoginButtonFade() {
+        TransitionManager.beginDelayedTransition(this)
+        loginButton.visibility = View.INVISIBLE
+    }
+
+    private fun animateLoginButtonCrazy() {
+        val animatorSet = AnimatorSet()
+
+        val translationAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
+        translationAnimator.interpolator = object: Interpolator {
+            override fun getInterpolation(input: Float): Float {
+                return Math.sin(input.toDouble() * 40).toFloat()
+            }
+        }
+        translationAnimator.duration = 3000
+        translationAnimator.addUpdateListener {
+            val value = it.animatedValue as Float
+            loginButton.translationY = value * 500
+        }
+        val alphaAnimator = ValueAnimator.ofFloat(1.0f, 0.0f)
+        alphaAnimator.addUpdateListener {
+            val value = it.animatedValue as Float
+            loginButton.alpha = value
+        }
+        alphaAnimator.startDelay = 2000
+
+        animatorSet.playSequentially(translationAnimator, alphaAnimator)
+        animatorSet.start()
     }
 }

@@ -5,8 +5,10 @@ import com.castagno.nicole.loginexample.common.presentation.Presenter
 import com.castagno.nicole.loginexample.login.domain.AuthRepository
 import com.castagno.nicole.loginexample.login.domain.EmailValidator
 import com.castagno.nicole.loginexample.login.domain.NotificationRepository
+import com.castagno.nicole.loginexample.login.domain.NotificationSetting
 import com.castagno.nicole.loginexample.login.presentation.view.LoginScreen
 import rx.Completable
+import rx.Subscriber
 
 // Class representing an event (storing useful information in a single object to improve readability)
 data class Event(val name: String, val argument: Any)
@@ -43,8 +45,6 @@ class LoginPresenter(
                 .subscribe { notificationSetting ->
                     Log.i("LoginPresenter", "notification setting received: $notificationSetting")
                 }
-
-        subscription.unsubscribe()
     }
 
     override fun onViewDestroy() {
