@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), LoginScreen {
                     .setAction("Action", null).show()
         }
 
+        /*
         val loginView = findViewById(R.id.login) as LoginView
 
         val tracker = LogCatEventTracker()
@@ -41,6 +42,9 @@ class MainActivity : AppCompatActivity(), LoginScreen {
             val password = loginView.password
             presenter.onCredentialsEntered(email, password)
         }
+        */
+        val candyListView = findViewById(R.id.candy_list) as CandyListView
+
     }
 
     override fun showLoginSuccessfulScreen() {
